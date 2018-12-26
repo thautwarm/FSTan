@@ -1,0 +1,8 @@
+R:\Redy\FSTan\FSTan\FSTan\bin\Debug\netcoreapp2.1\FSTan.deps.json
+R:\Redy\FSTan\FSTan\FSTan\bin\Debug\netcoreapp2.1\FSTan.dll
+R:\Redy\FSTan\FSTan\FSTan\bin\Debug\netcoreapp2.1\FSTan.pdb
+R:\Redy\FSTan\FSTan\FSTan\obj\Debug\netcoreapp2.1\FSTan.AssemblyInfoInputs.cache
+R:\Redy\FSTan\FSTan\FSTan\obj\Debug\netcoreapp2.1\FSTan.AssemblyInfo.fs
+R:\Redy\FSTan\FSTan\FSTan\obj\Debug\netcoreapp2.1\FSTan.dll
+R:\Redy\FSTan\FSTan\FSTan\obj\Debug\netcoreapp2.1\FSTan.pdb
+R:\Redy\FSTan\FSTan\FSTan\obj\Debug\netcoreapp2.1\FSTan.fsprojAssemblyReference.cache

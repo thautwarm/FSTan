@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    
+    <Compile Include="HKT.fs" />
+    <Compile Include="Monoid.fs" />
+    <Compile Include="Functor.fs" />
+    <Compile Include="Applicative.fs" />
+    <Compile Include="Monad.fs" />
+    <Compile Include="Data\List.fs" />
+    <Compile Include="Data\Maybe.fs" />
+  </ItemGroup>
+
+</Project>
