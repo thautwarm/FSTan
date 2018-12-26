@@ -26,3 +26,12 @@ let (>>=) a b = bind a b
 let combine<'a, 'b, 'M when 'M :> monad<'M>> = getsig<'M>.combine<'a, 'b>
 let (>>) a b = combine a b
 
+
+type DoNotation() =
+    member __.Bind(m, k) = bind m k
+    member __.Return a = return' a
+    member __.ReturnFrom a = a
+    member __.Combine ma mb = combine ma mb
+    // TODO: forM
+
+let doNotation = DoNotation()

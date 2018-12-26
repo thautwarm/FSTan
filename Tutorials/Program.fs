@@ -56,7 +56,27 @@ let test() =
     let s4 = show B
     printfn "%s\n%s\n%s\n%s" s1 s2 s3 s4 
 
+open FSTan.Monad
+open FSTan.Data.Maybe
+open FSTan.Data.List
+
+let some<'a> (a: 'a): maybe<'a> = wrap << Some <| a
 [<EntryPoint>]
 let main argv =
     test()
+    
+    
+    let m1 =
+        doNotation {
+            let! x = some 1
+        
+            return ""
+        }
+    
+    let m2 = 
+        doNotation {
+            let! x = wrap [1; 2; 3] : _ hlist
+            return x * 3
+        }
+    
     0 // return an integer exit code
