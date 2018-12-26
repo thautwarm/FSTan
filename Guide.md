@@ -63,6 +63,20 @@ and MyTypeCons2() =
             match a with
             | I a -> sprintf "isInt %d" a
             | S a -> sprintf "isStr %s" a
+let test() = 
+    let s1 = show <| I 32
+    let s2 = show <| S "123"
+    let s3 = show A
+    let s4 = show B
+    printfn "%s\n%s\n%s\n%s" s1 s2 s3 s4 
+
+```
+Output:
+```
+isInt 32
+isStr 123
+A
+B
 ```
 
 
@@ -75,13 +89,9 @@ Check https://github.com/thautwarm/FSTan/blob/master/FSTan/Functor.fs.
 Higher kined types
 ==================
 
-A signature type to represent a type constructor in FSTan:
-
 ```FSharp
-type Sig = ..
-
 let test_hkt<'a, 'b, 'c> (f: hkt<'a, 'b>) : hkt<'b, 'c> = 
     /// impl
 ```
 
-In terms of above snippet, if `c` is a concrete type, then `'a` is kinded of `* -> * -> *`, as well as `b` is kinded of `* -> *`.
+In terms of above snippet, if `c` is a concrete type, then `'a` has kind `* -> * -> *`, as well as `b` has kind `* -> *`.
