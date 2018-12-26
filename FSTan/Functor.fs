@@ -3,7 +3,7 @@
 open FSTan.HKT
 
 [<AbstractClass>]
-type functor<'F>() = 
+type functor<'F>() =
     abstract member fmap<'a, 'b> : 
         ('a -> 'b) -> hkt<'F, 'a> -> hkt<'F, 'b>
     abstract member ``<$``<'a, 'b> : 'a -> hkt<'F, 'b> -> hkt<'F, 'a>

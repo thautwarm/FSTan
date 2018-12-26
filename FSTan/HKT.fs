@@ -1,8 +1,20 @@
 ﻿module FSTan.HKT
 type hkt<'K, 'T> = interface end
 
+open System
+open System.Reflection
+
+let private ts  = Array.zeroCreate<Type> 0
+
+// seems to be silly...
+// any default object?
 [<GeneralizableValue>]
-let getsig<'a> = Unchecked.defaultof<'a>
+let getsig<'a> = 
+    let t = typeof<'a>
+    let f = t.GetConstructor(BindingFlags.Instance ||| BindingFlags.Public, null,
+                CallingConventions.HasThis, ts, null)
+    let o = f.Invoke([||])
+    o :?> 'a
 
 // Some builtin data types like Map, List, Option cannot be interfaced
 // with `hkt`, so we have to wrap them. 

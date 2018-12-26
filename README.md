@@ -2,6 +2,10 @@
 
 Exactly a full-featured and practical implementation typeclasses and higher kinded types in F#.
 
+For manuals check [Guide.md](https://github.com/thautwarm/FSTan/blob/master/Guide.md), where you'll be told how to use these concise typeclasses, higher kined types and constraints.
+
+
+
 ## Motivation and Features
 
 There are also other similar implementations in FSharp like `Higher` and `FSharpPlus`, but they're not able to provide all the features listed below, which motivate me create a better one:

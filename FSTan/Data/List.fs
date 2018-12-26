@@ -15,8 +15,8 @@ and HList() =
 
         override __.pure'<'a> (a: 'a) : hlist<'a> = wrap <| [a]
  
-        static member inline wrap<'a> (x : List<'a>): hlist<'a> =  {wrap = x} :> _
-        static member inline unwrap<'a> (x : hlist<'a>): List<'a> =  (x :?> _).wrap
+        static member wrap<'a> (x : List<'a>): hlist<'a> =  {wrap = x} :> _
+        static member unwrap<'a> (x : hlist<'a>): List<'a> =  (x :?> _).wrap
 
 and hListData<'a> = 
     {wrap : List<'a>}

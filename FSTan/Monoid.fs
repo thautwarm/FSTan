@@ -3,6 +3,7 @@ open FSTan.HKT
 
 [<AbstractClass>]
 type semigroup<'s>() =
+
     abstract member op<'a> : 
         hkt<'s, 'a> -> hkt<'s, 'a> -> hkt<'s, 'a>
     abstract member sconcat<'a> :
