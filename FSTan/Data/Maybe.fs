@@ -2,11 +2,11 @@
 
 open FSTan.HKT
 open FSTan.Monad
+open FSTan.Show
 
 type maybe<'a> = hkt<Maybe, 'a>
 and Maybe() =
     inherit monad<Maybe>() with
-        static member si = Maybe()
         override __.bind<'a, 'b> (m: maybe<'a>) (k: 'a -> maybe<'b>) =
             let m = unwrap m
             match m with
@@ -17,7 +17,12 @@ and Maybe() =
         static member wrap<'a> (x : Option<'a>): maybe<'a> =  {wrap = x} :> _
         static member unwrap<'a> (x : maybe<'a>): Option<'a> =  (x :?> _).wrap
 
-and MaybeData<'a> = 
+        interface show<Maybe> with
+            member __.show (a: maybe<'a>) =
+                let a = Maybe.unwrap a
+                a.ToString()
+
+and OptionWrapper<'a> = 
     {wrap : Option<'a>}
     interface maybe<'a>
 

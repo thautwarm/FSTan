@@ -75,7 +75,7 @@ let main argv =
     
     let m2 = 
         doNotation {
-            let! x = wrap [1; 2; 3] : _ hlist
+            let! x = HList.wrap [1; 2; 3]
             return x * 3
         }
     

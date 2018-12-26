@@ -2,6 +2,7 @@
 
 open FSTan.HKT
 open FSTan.Monad
+open FSTan.Show
 
 type hlist<'a> = hkt<HList, 'a>
 and HList() =
@@ -17,9 +18,15 @@ and HList() =
  
         static member wrap<'a> (x : List<'a>): hlist<'a> =  {wrap = x} :> _
         static member unwrap<'a> (x : hlist<'a>): List<'a> =  (x :?> _).wrap
+        interface show<HList> with
+            member __.show (x: hlist<'a>) =
+                let x = unwrap x : _ list
+                x.ToString()
 
 and hListData<'a> = 
     {wrap : List<'a>}
     interface hlist<'a>
+        
+        
 
 
