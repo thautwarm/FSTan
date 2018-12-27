@@ -12,7 +12,7 @@ There are also other similar implementations in FSharp like `Higher` and `FSharp
 
 - Support instance resolution.
 - Support ad-hoc polymorphism.
-- Support to Create a typeclass and add constraints to it.
+- Support to create a typeclass and add constraints to it.
 - Support subtypeclassing.
 - Support to directly access type constructor.
 - Support default implementations for typeclass.
@@ -63,7 +63,7 @@ required to work with higher kined types.
         // listm : resolved to be hlist<int>
 
         let f : int -> string = ""
-        unwrap <| fmap f listm
+        fmap f listm
         // return value is resolved to be hlist<string>
    ```
 3. Cannot implement instance for datatypes that are not constructed by a type constructor.   
