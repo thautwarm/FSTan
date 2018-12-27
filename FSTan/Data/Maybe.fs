@@ -26,4 +26,13 @@ and OptionWrapper<'a> =
     {wrap : Option<'a>}
     interface maybe<'a>
 
+let Just<'a> (a: 'a) : maybe<'a> = wrap <| Some a
+
+[<GeneralizableValue>]
+let Nothing<'a> : maybe<'a> = wrap <| None
+let (|Just|Nothing|) (m: maybe<'a>) =
+    match unwrap m with
+    | Some m -> Just m
+    | None    -> Nothing
+
 

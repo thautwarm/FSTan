@@ -59,17 +59,16 @@ let test() =
 open FSTan.Monad
 open FSTan.Data.Maybe
 open FSTan.Data.List
+open FSTan.Control.State
+open FSTan.Data.Either
 
-let some<'a> (a: 'a): maybe<'a> = wrap << Some <| a
 [<EntryPoint>]
 let main argv =
     test()
-    
-    
+
     let m1 =
         doNotation {
-            let! x = some 1
-        
+            let! x = Just 1        
             return ""
         }
     
@@ -79,4 +78,20 @@ let main argv =
             return x * 3
         }
     
+    let m3: state<int, int> = 
+        doNotation {
+            let! s = get
+            return s + 1
+        }
+    let a, b = runState m3 1
+
+    let f = Right 1
+    let m4 : either<string, int> -> either<string, int> = fun m ->
+        doNotation {
+            let! a = m
+            return a + 1
+        }
+    
+    let (Right 2) = m4 f
+
     0 // return an integer exit code
