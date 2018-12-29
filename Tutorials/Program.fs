@@ -62,24 +62,31 @@ open FSTan.Data.List
 open FSTan.Control.State
 open FSTan.Data.Either
 
+type S() = 
+    member __.s (x: int) = x + 1
+
+let inline app< ^F, 'a, 'c when ^F: (static member cons: 'a -> 'c)> : ^F -> 'a -> 'c = fun F a ->
+    (^F: (static member cons: 'a -> 'c) a)
+
+
 [<EntryPoint>]
 let main argv =
     test()
 
     let m1 =
-        doNotation {
+        tan {
             let! x = Just 1        
             return ""
         }
     
     let m2 = 
-        doNotation {
+        tan {
             let! x = HList.wrap [1; 2; 3]
             return x * 3
         }
     
     let m3: state<int, int> = 
-        doNotation {
+        tan {
             let! s = get
             return s + 1
         }
@@ -87,7 +94,7 @@ let main argv =
 
     let f = Right 1
     let m4 : either<string, int> -> either<string, int> = fun m ->
-        doNotation {
+        tan {
             let! a = m
             return a + 1
         }

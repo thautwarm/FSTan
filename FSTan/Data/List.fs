@@ -23,7 +23,7 @@ and HList() =
                 let x = unwrap x : _ list
                 x.ToString()
 
-and hListData<'a> = 
+and hListData<'a> =
     {wrap : List<'a>}
     interface hlist<'a>
         

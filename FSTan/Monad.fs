@@ -34,4 +34,4 @@ type DoNotation() =
     member __.Combine ma mb = combine ma mb
     // TODO: forM
 
-let doNotation = DoNotation()
+let Do = DoNotation()

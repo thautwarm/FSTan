@@ -1,18 +1,26 @@
 ﻿module FSTan.HKT
 type hkt<'K, 'T> = interface end
-
 open System
 open System.Reflection
 
 let private ts  = Array.zeroCreate<Type> 0
 
-// seems to be silly...
-// any default object?
+
 [<GeneralizableValue>]
-let getsig<'a> = 
+let getsig<'a> =
+    // There is another way to do so: add constraint 
+    // `'a when 'a: (new: unit -> 'a)`.
+    // However, if this way is adopted, users have to
+    // manually mark each generic typevar of a type constructor,
+    // which could be verbose and annoying.
+    // With above considerations, I use reflection instead.
     let t = typeof<'a>
-    let f = t.GetConstructor(BindingFlags.Instance ||| BindingFlags.Public, null,
-                CallingConventions.HasThis, ts, null)
+    let f = t.GetConstructor(
+                BindingFlags.Instance ||| BindingFlags.Public, 
+                null,
+                CallingConventions.HasThis,
+                ts,
+                null)
     let o = f.Invoke([||])
     o :?> 'a
 

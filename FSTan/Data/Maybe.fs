@@ -1,4 +1,4 @@
-﻿module FSTan.Data.Maybe
+﻿module rec FSTan.Data.Maybe
 
 open FSTan.HKT
 open FSTan.Monad
