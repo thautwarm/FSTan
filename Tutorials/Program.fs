@@ -70,6 +70,18 @@ type S() =
 let inline app< ^F, 'a, 'c when ^F: (static member cons: 'a -> 'c)> : ^F -> 'a -> 'c = fun F a ->
     (^F: (static member cons: 'a -> 'c) a)
 
+open FSTan.Monad
+open FSTan.Control.Trans.State
+
+
+let plusOne<'m when 'm :> monad<'m>> : stateT<int, 'm, unit> = Do {
+    let! state = get     // similar to `state <- get` in haskell
+    do! put <| state + 1
+    return ()
+}
+
+let testMaybe(): stateT<int, MaybeSig, unit> = plusOne
+let testEither<'a> : stateT<int, EitherSig<'a>, unit> = plusOne
 
 [<EntryPoint>]
 let main argv =
@@ -83,7 +95,7 @@ let main argv =
 
     let m2 =
         Do {
-            let! x = HList.wrap [1; 2; 3]
+            let! x = HListSig.wrap [1; 2; 3]
             return x * 3
         }
 
@@ -108,6 +120,8 @@ let main argv =
         let! s = get
         return a
     }
+
+    let s = runStateT plusOne<MaybeSig> 1 
 
 
     0 // return an integer exit code

@@ -2,9 +2,9 @@
 open FSTan.HKT
 open FSTan.Monad
 
-type state<'s, 'a> = hkt<StateMonad<'s>, 'a>
-and StateMonad<'s>() =
-    inherit monad<StateMonad<'s>>() with
+type state<'s, 'a> = hkt<StateSig<'s>, 'a>
+and StateSig<'s>() =
+    inherit monad<StateSig<'s>>() with
         override __.bind<'a, 'b> (m: state<'s, 'a>) (k: 'a -> state<'s, 'b>) =
             let m = State' <| fun s ->
                 let a, s = runState m s

@@ -8,4 +8,3 @@ type show<'s> =
     end
 
 let show<'a, 's when 's :> show<'s>> (a: hkt<'s, 'a>) = getsig<'s>.show a
-

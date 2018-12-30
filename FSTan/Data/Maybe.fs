@@ -4,22 +4,21 @@ open FSTan.HKT
 open FSTan.Monad
 open FSTan.Show
 
-type maybe<'a> = hkt<Maybe, 'a>
-and Maybe() =
-    inherit monad<Maybe>() with
+type maybe<'a> = hkt<MaybeSig, 'a>
+and MaybeSig() =
+    inherit monad<MaybeSig>() with
         override __.bind<'a, 'b> (m: maybe<'a>) (k: 'a -> maybe<'b>) =
-            let m = unwrap m
             match m with
-            | Some a -> k a
-            | None   -> wrap None
+            | Just a -> k a
+            | Nothing -> Nothing
 
         override __.pure'<'a> (a: 'a) : maybe<'a> = wrap <| Some a
         static member wrap<'a> (x : Option<'a>): maybe<'a> =  {wrap = x} :> _
         static member unwrap<'a> (x : maybe<'a>): Option<'a> =  (x :?> _).wrap
 
-        interface show<Maybe> with
+        interface show<MaybeSig> with
             member __.show (a: maybe<'a>) =
-                let a = Maybe.unwrap a
+                let a = MaybeSig.unwrap a
                 a.ToString()
 
 and OptionWrapper<'a> =

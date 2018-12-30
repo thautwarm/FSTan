@@ -3,9 +3,9 @@ open FSTan.HKT
 open FSTan.Monad
 open FSTan.MonadTrans
 
-type stateT<'s, 'm, 'a when 'm :> monad<'m>> = hkt<stateTrans<'s, 'm>, 'a>
-and stateTrans<'s, 'm when 'm :> monad<'m>>() =
-    inherit monad<stateTrans<'s, 'm>>() with
+type stateT<'s, 'm, 'a when 'm :> monad<'m>> = hkt<StateTransSig<'s, 'm>, 'a>
+and StateTransSig<'s, 'm when 'm :> monad<'m>>() =
+    inherit monad<StateTransSig<'s, 'm>>() with
         override si.pure'<'a> (a: 'a): stateT<'s, 'm, 'a> =
             StateT <| fun s -> return' (a, s)
 
@@ -17,8 +17,8 @@ and stateTrans<'s, 'm when 'm :> monad<'m>>() =
             runStateT (k a) s'
 
         interface hkt<'s, 'm>
-        interface monadTrans<stateTrans<'s, 'm>, 'm> with
-            member si.lift<'a> (m: hkt<'m, 'a>): hkt<stateTrans<'s, 'm>, 'a> =
+        interface monadTrans<StateTransSig<'s, 'm>, 'm> with
+            member si.lift<'a> (m: hkt<'m, 'a>): hkt<StateTransSig<'s, 'm>, 'a> =
                 StateT <| fun (s: 's) ->
                 m >>= fun a -> return' (a, s)
 

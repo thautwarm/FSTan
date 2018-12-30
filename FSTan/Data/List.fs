@@ -4,9 +4,9 @@ open FSTan.HKT
 open FSTan.Monad
 open FSTan.Show
 
-type hlist<'a> = hkt<HList, 'a>
-and HList() =
-    inherit monad<HList>() with
+type hlist<'a> = hkt<HListSig, 'a>
+and HListSig() =
+    inherit monad<HListSig>() with
         override __.bind<'a, 'b> (m: hlist<'a>) (k: 'a -> hlist<'b>) =
             let f x =
                 let m: hlist<'b> = k x
@@ -18,7 +18,7 @@ and HList() =
 
         static member wrap<'a> (x : List<'a>): hlist<'a> =  {wrap = x} :> _
         static member unwrap<'a> (x : hlist<'a>): List<'a> =  (x :?> _).wrap
-        interface show<HList> with
+        interface show<HListSig> with
             member __.show (x: hlist<'a>) =
                 let x = unwrap x : _ list
                 x.ToString()
