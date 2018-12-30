@@ -56,7 +56,7 @@ required to work with higher kined types.
 
    let test() =
 
-        let listm = monad {
+        let listm = Do {
             let! x = wrap [1, 2, 3]
             wrap [x]
         }
