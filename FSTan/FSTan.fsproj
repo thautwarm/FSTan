@@ -15,6 +15,7 @@
     <Compile Include="Data\Either.fs" />
     <Compile Include="Data\List.fs" />
     <Compile Include="Data\Maybe.fs" />
+    <Compile Include="Control\Trans\State.fs" />
     <Compile Include="Control\State.fs" />
   </ItemGroup>
 

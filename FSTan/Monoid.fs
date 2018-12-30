@@ -4,16 +4,16 @@ open FSTan.HKT
 [<AbstractClass>]
 type semigroup<'s>() =
 
-    abstract member op<'a> : 
+    abstract member op<'a> :
         hkt<'s, 'a> -> hkt<'s, 'a> -> hkt<'s, 'a>
     abstract member sconcat<'a> :
         hkt<'s, 'a> -> hkt<'s, 'a>
-    abstract member stimes<'a> : 
+    abstract member stimes<'a> :
         int -> hkt<'s, 'a> -> hkt<'s, 'a>
-    
+
     default si.stimes a b = semigroup<'s>.stimesDefault si a b
 
-    static member stimesDefault si y0 x0 = 
+    static member stimesDefault si y0 x0 =
         if y0 <= 0
         then   failwith "stimes: positive multiplier expected"
         else
@@ -33,7 +33,7 @@ type semigroup<'s>() =
 
 
 [<AbstractClass>]
-type monoid<'s>() = 
+type monoid<'s>() =
     inherit semigroup<'s>()
         abstract member mempty<'m> : unit -> hkt<'s, 'm>
         abstract member mappend<'m> : hkt<'s, 'm> -> hkt<'s, 'm> -> hkt<'s, 'm>

@@ -2,7 +2,7 @@
 open FSTan.HKT
 
 
-type show<'s> = 
+type show<'s> =
     interface
         abstract member show<'a> : hkt<'s, 'a> -> string
     end

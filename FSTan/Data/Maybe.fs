@@ -12,7 +12,7 @@ and Maybe() =
             match m with
             | Some a -> k a
             | None   -> wrap None
-        
+
         override __.pure'<'a> (a: 'a) : maybe<'a> = wrap <| Some a
         static member wrap<'a> (x : Option<'a>): maybe<'a> =  {wrap = x} :> _
         static member unwrap<'a> (x : maybe<'a>): Option<'a> =  (x :?> _).wrap
@@ -22,7 +22,7 @@ and Maybe() =
                 let a = Maybe.unwrap a
                 a.ToString()
 
-and OptionWrapper<'a> = 
+and OptionWrapper<'a> =
     {wrap : Option<'a>}
     interface maybe<'a>
 
@@ -34,5 +34,3 @@ let (|Just|Nothing|) (m: maybe<'a>) =
     match unwrap m with
     | Some m -> Just m
     | None    -> Nothing
-
-

@@ -7,7 +7,7 @@ Typeclasses
 
 Typeclassess are achived through abstract classes, which makes it works perfect for both subtypeclassing and default implementations.
 
-If some type is constructed with a type constructor, you can implement `show` class for it. 
+If some type is constructed with a type constructor, you can implement `show` class for it.
 
 Let's have a look at how to write a `show` class and use it in polymorphism functions and even operators.
 
@@ -21,22 +21,22 @@ open FSTan.HKT
 type show<'s>() =
     abstract member show<'a> : hkt<'s, 'a> -> string
 
-// I have a typeclass, 
-// I have 2 datatypes, 
-// Oh! 
+// I have a typeclass,
+// I have 2 datatypes,
+// Oh!
 // Polymorphism!
 let show<'a, 's when 's :> show<'s>> = getsig<'s>.show<'a>
 
 type myData1<'a> = // define datatype
     | A | B | C
-    interface hkt<MyTypeCons1, 'a> 
+    interface hkt<MyTypeCons1, 'a>
 
-and MyTypeCons1() = 
+and MyTypeCons1() =
     // define type constructor
     // in F#, we don't really have this, but
-    // we can leverage a signature type(yes, this is just a signature) 
-    // and `hkt`(check FSTan.HKT, not magic at all) 
-    // to fully simulate a type constructor. 
+    // we can leverage a signature type(yes, this is just a signature)
+    // and `hkt`(check FSTan.HKT, not magic at all)
+    // to fully simulate a type constructor.
     inherit show<MyTypeCons1>() with
         override si.show a =
             // This conversion can absolutely succeed
@@ -44,18 +44,18 @@ and MyTypeCons1() =
             // interfaces hkt<MyTypeCons1, 'a>
             let a = a :?> _ myData1
 
-            sprintf "%A" a 
+            sprintf "%A" a
 
 
 type myData2<'a> = // define datatype
     | I of int
     | S of string
-    interface hkt<MyTypeCons2, 'a> 
-and MyTypeCons2() = 
+    interface hkt<MyTypeCons2, 'a>
+and MyTypeCons2() =
     // define type constructor
     // in F#, we don't really have this, but
-    // we can leverage a signature type(yes, this is just a signature) 
-    // and `hkt`(check FSTan.HKT, not magic at all) 
+    // we can leverage a signature type(yes, this is just a signature)
+    // and `hkt`(check FSTan.HKT, not magic at all)
     // to fully simulate a type constructor.
     inherit show<MyTypeCons2>() with
         override si.show a =
@@ -63,12 +63,12 @@ and MyTypeCons2() =
             match a with
             | I a -> sprintf "isInt %d" a
             | S a -> sprintf "isStr %s" a
-let test() = 
+let test() =
     let s1 = show <| I 32
     let s2 = show <| S "123"
     let s3 = show A
     let s4 = show B
-    printfn "%s\n%s\n%s\n%s" s1 s2 s3 s4 
+    printfn "%s\n%s\n%s\n%s" s1 s2 s3 s4
 
 ```
 Output:
@@ -90,7 +90,7 @@ Higher kined types
 ==================
 
 ```FSharp
-let test_hkt<'a, 'b, 'c> (f: hkt<'a, 'b>) : hkt<'b, 'c> = 
+let test_hkt<'a, 'b, 'c> (f: hkt<'a, 'b>) : hkt<'b, 'c> =
     /// impl
 ```
 

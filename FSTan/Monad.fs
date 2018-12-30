@@ -8,12 +8,12 @@ type monad<'M>() =
     inherit applicative<'M>()
        abstract member return'<'a>     : 'a -> hkt<'M, 'a>
        abstract member bind<'a, 'b>    : hkt<'M, 'a> -> ('a -> hkt<'M, 'b>) -> hkt<'M, 'b>
-       abstract member combine<'a, 'b> :  
+       abstract member combine<'a, 'b> :
         hkt<'M, 'a> -> hkt<'M, 'b> -> hkt<'M, 'b>
-       
+
        default si.combine ma mb = si.bind ma <| fun _ -> mb
        default si.return' a = si.pure' a
-       
+
        abstract member fail<'a> : string -> hkt<'M, 'a>
        default __.fail s = failwith s
 

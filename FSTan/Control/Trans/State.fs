@@ -4,7 +4,7 @@ open FSTan.Monad
 open FSTan.MonadTrans
 
 type stateT<'s, 'm, 'a when 'm :> monad<'m>> = hkt<stateTrans<'s, 'm>, 'a>
-and stateTrans<'s, 'm when 'm :> monad<'m>>() = 
+and stateTrans<'s, 'm when 'm :> monad<'m>>() =
     inherit monad<stateTrans<'s, 'm>>() with
         override si.pure'<'a> (a: 'a): stateT<'s, 'm, 'a> =
             StateT <| fun s -> return' (a, s)

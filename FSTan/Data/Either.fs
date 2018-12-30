@@ -4,7 +4,7 @@ open FSTan.Show
 open FSTan.Monad
 
 type either<'e, 'a> = hkt<EitherMonad<'e>, 'a>
-and EitherMonad<'e>() = 
+and EitherMonad<'e>() =
     inherit monad<EitherMonad<'e>>() with
         override __.pure'<'a> (a: 'a): either<'e, 'a> = Right a :> _
         override __.bind<'a, 'b> (m: either<'e, 'a>) (k: 'a -> either<'e, 'b>): either<'e, 'b> =
@@ -16,7 +16,7 @@ and EitherMonad<'e>() =
                 let a = a :?> eitherData<_, _>
                 a.ToString()
 
-and eitherData<'e, 'a> = 
+and eitherData<'e, 'a> =
     | Left of 'e
     | Right of 'a
     interface either<'e, 'a>
