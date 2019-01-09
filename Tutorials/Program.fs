@@ -95,7 +95,7 @@ let main argv =
 
     let m2 =
         Do {
-            let! x = HListSig.wrap [1; 2; 3]
+            let! x = ListSig.wrap [1; 2; 3]
             return x * 3
         }
 

@@ -24,10 +24,15 @@ let getsig<'a> =
     let o = f.Invoke([||])
     o :?> 'a
 
+
 // Some builtin data types like Map, List, Option cannot be interfaced
 // with `hkt`, so we have to wrap them.
 // Following methods provide a common interface to access `wrap` and `unwrap`
 // operations for all wrapped types.
+// Also, following methods implement a core infrastructure introduced from this paper:
+//    https://www.cl.cam.ac.uk/~jdy22/papers/lightweight-higher-kinded-polymorphism.pdf
+// `wrap` here is a polymorphic `inj` in that paper and `unwrap` is a polymorphic `prj`.
+
 let inline wrap<'o, ^f, 'a when ^f : (static member wrap : 'o -> hkt<'f, 'a>)> (o: 'o) : hkt< ^f, 'a> =
     (^f : (static member wrap : 'o -> hkt<'f, 'a>) o)
 
