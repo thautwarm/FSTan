@@ -27,7 +27,7 @@ Yes, exactly, it's a what many and I have dreamed about for so long.
 higher kinded types have to be upcasted to an unique abstract class, for intsance,
 `maybe<'a>` has to be casted to `hkt<Maybe, 'a>`.
 
-2. For some builtin datatypes cannot be interfaced with `hkt`, an      extra wrapper class is
+2. For some builtin datatypes cannot be interfaced with `hkt`, an extra wrapper class is
 required to work with higher kined types.
 
     For instance, interface type `listData<'a>` is required for the builtin `List<'a>`.
@@ -75,3 +75,4 @@ required to work with higher kined types.
 3. Cannot implement instance for datatypes that are not constructed by a type constructor.
 For instance, you cannot implement any typeclass for all primitives types like integers, floats and so on, unless you wrap them ...
 
+4. Cannot separate typeclass instances from datatype definitions, which means that you cannot extend an existed datatype and might hurt.
