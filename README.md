@@ -8,7 +8,7 @@ For manuals check [Guide.md](https://github.com/thautwarm/FSTan/blob/master/Guid
 
 ## Motivation and Features
 
-There are also other similar implementations in FSharp like `Higher` and `FSharpPlus`, but they're not able to provide all the features listed below, which motivate me create a better one:
+There are also other similar implementations in FSharp like `Higher` and `FSharpPlus`, but they're not able to provide all the features listed below, which motivate me to create a better one:
 
 - Support instance resolution.
 - Support ad-hoc polymorphism.
@@ -32,7 +32,7 @@ required to work with higher kined types.
 
     For instance, interface type `listData<'a>` is required for the builtin `List<'a>`.
 
-    You can use `wrap` and `unwrap` to transform datatypes from `List<'a>` to `hlist<'a>`, vice versa.
+    You can use `wrap` and `unwrap` to transform datatypes from `List<'a>` to `hkt<mkList<ListSig>,'a>`, vice versa.
 
    ```FSharp
     module List' = List
