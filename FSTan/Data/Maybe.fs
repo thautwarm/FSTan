@@ -4,32 +4,34 @@ open FSTan.HKT
 open FSTan.Monad
 open FSTan.Show
 
-type maybe<'a> = hkt<MaybeSig, 'a>
-and MaybeSig() =
-    inherit monad<MaybeSig>() with
-        override __.bind<'a, 'b> (m: maybe<'a>) (k: 'a -> maybe<'b>) =
-            match m with
-            | Just a -> k a
-            | Nothing -> Nothing
+type mkMaybe<'M>() =
+    inherit monad<mkMaybe<'M>>()
+        override __.bind<'a, 'b> (m: hkt<mkMaybe<'M>, 'a>) (k: 'a -> hkt<mkMaybe<'M>, 'b>) =
+            match unwrap m with
+            | Some a -> k a
+            | None -> Nothing
 
-        override __.pure'<'a> (a: 'a) : maybe<'a> = wrap <| Some a
-        static member wrap<'a> (x : Option<'a>): maybe<'a> =  {wrap = x} :> _
-        static member unwrap<'a> (x : maybe<'a>): Option<'a> =  (x :?> _).wrap
 
-        interface show<MaybeSig> with
-            member __.show (a: maybe<'a>) =
-                let a = MaybeSig.unwrap a
+        override __.pure'<'a> (a: 'a) : hkt<mkMaybe<'M>, 'a> = wrap <| Some a
+        static member wrap<'a> (x : Option<'a>): hkt<mkMaybe<'M>, 'a> =  {wrap = x} :> _
+        static member unwrap<'a> (x : hkt<mkMaybe<'M>, 'a>): Option<'a> =  (x :?> _).wrap
+        interface show<mkMaybe<'M>> with
+            member __.show (a: hkt<mkMaybe<'M>, 'a>) =
+                let a = mkMaybe<'M>.unwrap a
                 a.ToString()
 
-and OptionWrapper<'a> =
+and OptionWrapper<'M, 'a> =
     {wrap : Option<'a>}
-    interface maybe<'a>
+    interface hkt<mkMaybe<'M>, 'a>
 
-let Just<'a> (a: 'a) : maybe<'a> = wrap <| Some a
+let Just<'M, 'a> (a: 'a) : hkt<mkMaybe<'M>, 'a> = wrap <| Some a
 
 [<GeneralizableValue>]
-let Nothing<'a> : maybe<'a> = wrap <| None
-let (|Just|Nothing|) (m: maybe<'a>) =
-    match unwrap m with
+let Nothing<'M, 'a> : hkt<mkMaybe<'M>, 'a> = wrap <| None
+
+let (|Just|Nothing|) (m: hkt<mkMaybe<'M>, 'a>) =
+    let s: 'a Option = unwrap m
+    match s with
     | Some m -> Just m
     | None    -> Nothing
+

@@ -35,34 +35,43 @@ required to work with higher kined types.
     You can use `wrap` and `unwrap` to transform datatypes from `List<'a>` to `hlist<'a>`, vice versa.
 
    ```FSharp
-    open FSTan.HKT
-    open FSTan.Monad
-    open FSTan.Show
-
     module List' = List
     type List'<'a> = List<'a>
 
-    type 'a list = hkt<ListSig, 'a>
-    and ListSig() =
-        inherit monad<ListSig>() with
-            override __.bind<'a, 'b> (m: list<'a>) (k: 'a -> list<'b>) =
+
+    type mkList<'L>() =
+        inherit monad<mkList<'L>>()
+            static member wrap<'a> (x : List'<'a>): hkt<mkList<'L>, 'a> =
+                {wrap = x} :> _
+            static member unwrap<'a> (x : hkt<mkList<'L>, 'a>): List'<'a> =
+                (x :?> _).wrap
+
+            default si.bind<'a, 'b> (m: hkt<mkList<'L>, 'a>) (k: 'a -> hkt<mkList<'L>, 'b>): hkt<mkList<'L>, 'b> =
                 wrap <| List'.collect (unwrap << k) (unwrap m)
 
-            override __.pure'<'a> (a: 'a) : list<'a> = wrap <| [a]
-            static member wrap<'a> (x : List'<'a>): list<'a> =  {wrap = x} :> _
-            static member unwrap<'a> (x : list<'a>): List'<'a> =  (x :?> _).wrap
-            interface show<ListSig> with
-                member __.show (x: 'a list) =
+            default si.pure'<'a> (a: 'a): hkt<mkList<'L>, 'a> = wrap <| [a]
+            interface show<mkList<'L>> with
+                member si.show (x: hkt<mkList<'L>, 'a>) =
                     let x = unwrap x
                     x.ToString()
 
-    and listData<'a> =
+    and listData<'L, 'a> =
         {wrap : List'<'a>}
-        interface list<'a>
+        interface hkt<mkList<'L>, 'a>
+
+
+   // create a concrete List type
+   type ListSig() =
+    // default implements following type classes:
+    // - monad (functor and applicative are implemented simultaneously)
+    // - show
+
+    inherit mkList<ListSig>()
+   type list<'a> = hkt<mkList<ListSig>, 'a>
 
    let test() =
 
-        let listm = Do {
+        let listm: _ list = Do {
             let! x = wrap [1, 2, 3]
             wrap [x]
         }
@@ -74,5 +83,3 @@ required to work with higher kined types.
    ```
 3. Cannot implement instance for datatypes that are not constructed by a type constructor.
 For instance, you cannot implement any typeclass for all primitives types like integers, floats and so on, unless you wrap them ...
-
-4. Cannot separate typeclass instances from datatype definitions, which means that you cannot extend an existed datatype and might hurt.

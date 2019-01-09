@@ -7,23 +7,25 @@ open FSTan.Show
 module List' = List
 type List'<'a> = List<'a>
 
-type 'a list = hkt<ListSig, 'a>
-and ListSig() =
-    inherit monad<ListSig>() with
-        override __.bind<'a, 'b> (m: list<'a>) (k: 'a -> list<'b>) =
+type mkList<'L>() =
+    inherit monad<mkList<'L>>()
+        static member wrap<'a> (x : List'<'a>): hkt<mkList<'L>, 'a> =
+            {wrap = x} :> _
+        static member unwrap<'a> (x : hkt<mkList<'L>, 'a>): List'<'a> =
+            (x :?> _).wrap
+
+        default si.bind<'a, 'b> (m: hkt<mkList<'L>, 'a>) (k: 'a -> hkt<mkList<'L>, 'b>): hkt<mkList<'L>, 'b> =
             wrap <| List'.collect (unwrap << k) (unwrap m)
 
-        override __.pure'<'a> (a: 'a) : list<'a> = wrap <| [a]
-        static member wrap<'a> (x : List'<'a>): list<'a> =  {wrap = x} :> _
-        static member unwrap<'a> (x : list<'a>): List'<'a> =  (x :?> _).wrap
-        interface show<ListSig> with
-            member __.show (x: 'a list) =
+        default si.pure'<'a> (a: 'a): hkt<mkList<'L>, 'a> = wrap <| [a]
+        interface show<mkList<'L>> with
+            member si.show (x: hkt<mkList<'L>, 'a>) =
                 let x = unwrap x
                 x.ToString()
 
-and listData<'a> =
+and listData<'L, 'a> =
     {wrap : List'<'a>}
-    interface list<'a>
+    interface hkt<mkList<'L>, 'a>
 
 
 

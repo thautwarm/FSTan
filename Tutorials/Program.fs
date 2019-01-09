@@ -64,6 +64,33 @@ open FSTan.Data.Either
 open FSTan.Control.Trans.State
 open FSTan.MonadTrans
 
+
+type ListSig() = 
+    inherit mkList<ListSig>()
+
+type List = mkList<ListSig>
+
+type EitherSig<'e>() =
+    inherit mkEither<EitherSig<'e>, 'e>()
+type Either<'e> = mkEither<EitherSig<'e>, 'e>
+
+
+type StateSig<'s>() =
+    inherit mkState<StateSig<'s>, 's>()
+type State<'s> = mkState<StateSig<'s>, 's>
+
+
+type MaybeSig() =
+    inherit mkMaybe<MaybeSig>()
+
+type Maybe = mkMaybe<MaybeSig>
+
+
+type either<'e, 'a> = hkt<Either<'e>, 'a>
+type maybe<'a> = hkt<Maybe, 'a>
+type state<'s, 'a> = hkt<State<'s>, 'a>
+type list<'a> = hkt<List, 'a>
+
 type S() =
     member __.s (x: int) = x + 1
 
@@ -74,14 +101,21 @@ open FSTan.Monad
 open FSTan.Control.Trans.State
 
 
+
+
+type StateTransSig<'s, 'm when 'm :> monad<'m>>() = 
+    inherit mkStateTras<StateTransSig<'s, 'm>, 's, 'm>()
+
+type stateT<'s, 'm, 'a when 'm :> monad<'m>> = hkt<mkStateTras<StateTransSig<'s, 'm>, 's, 'm>, 'a>
+
 let plusOne<'m when 'm :> monad<'m>> : stateT<int, 'm, unit> = Do {
     let! state = get     // similar to `state <- get` in haskell
     do! put <| state + 1
     return ()
 }
 
-let testMaybe(): stateT<int, MaybeSig, unit> = plusOne
-let testEither<'a> : stateT<int, EitherSig<'a>, unit> = plusOne
+let testMaybe(): stateT<int, Maybe, unit> = plusOne
+let testEither<'a> : stateT<int, Either<'a>, unit> = plusOne
 
 [<EntryPoint>]
 let main argv =
@@ -93,9 +127,9 @@ let main argv =
             return ""
         }
 
-    let m2 =
+    let m2 : _ list =
         Do {
-            let! x = ListSig.wrap [1; 2; 3]
+            let! x = wrap [1; 2; 3]
             return x * 3
         }
 
@@ -121,7 +155,7 @@ let main argv =
         return a
     }
 
-    let s = runStateT plusOne<MaybeSig> 1 
+    let s = runStateT plusOne<Maybe> 1 
 
 
     0 // return an integer exit code

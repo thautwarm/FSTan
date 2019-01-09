@@ -1,53 +1,30 @@
 ﻿module rec FSTan.Control.State
+
 open FSTan.HKT
+
 open FSTan.Monad
+open FSTan.Data.Identity
+open FSTan.Control.Trans
 
-type state<'s, 'a> = hkt<StateSig<'s>, 'a>
-and StateSig<'s>() =
-    inherit monad<StateSig<'s>>() with
-        override __.bind<'a, 'b> (m: state<'s, 'a>) (k: 'a -> state<'s, 'b>) =
-            let m = State' <| fun s ->
-                let a, s = runState m s
-                runState (k a) s
-            m :> _
+module StateT = FSTan.Control.Trans.State
 
-        override __.pure'<'a> (a: 'a) : state<'s, 'a> =
-            let m =  State' <| fun s -> (a, s)
-            m :> _
+type S_Id() =
+    inherit mkIdentity<S_Id>()
 
-and stateData<'s, 'a> =
-    | State' of ('s -> ('a * 's))
-    interface state<'s, 'a>
+type mkState<'ST, 's> = StateT.mkStateTras<'ST, 's, mkIdentity<S_Id>>
 
 [<GeneralizableValue>]
-let runState<'s, 'a>(m: state<'s, 'a>): ('s -> 'a * 's) =
-    let (State' f): stateData<'s, 'a> = m :?> _
-    f
+let runState<'ST, 's, 'a>(m: hkt<mkState<'ST, 's>, 'a>): ('s -> 'a * 's) =
+    let f = StateT.runStateT m
+    fun s -> S_Id.unwrap (f s)
 
-[<GeneralizableValue>]
-let get<'s> : state<'s, 's> =
-    State'(fun s -> (s, s)) :> _
+let State<'ST, 's, 'a> (f: 's -> ('a * 's)): hkt<mkState<'ST, 's>, 'a> =
+    let f = fun s -> S_Id.wrap (f s)
+    StateT.StateT f
 
-let put<'s, 'a> (s: 's) : state<'s, unit> =
-    State'(fun _ -> ((), s)) :> _
-
-let State<'s, 'a> (f: 's -> ('a * 's)): state<'s, 'a> =
-    upcast (State' f)
-
-let (|State|) (s: state<'s, 'a>) =
-    let (State' f) = s :?> stateData<'s, 'a>
-    in State f
-
-
-
-
-
-
-
-
-
-
-
+let (|State|) (s: hkt<mkState<'ST, 's>, 'a>) =
+    let (StateT.StateT f) = s
+    in State (fun s -> S_Id.unwrap (f s))
 
 
 
