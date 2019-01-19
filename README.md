@@ -77,9 +77,10 @@ required to work with higher kined types.
         }
         // listm : resolved to be list<int>
 
-        let f : int -> string = ""
+        let f (x: int) : string = ""
         fmap f listm
         // return value is resolved to be list<string>
    ```
 3. Cannot implement instance for datatypes that are not constructed by a type constructor.
-For instance, you cannot implement any typeclass for all primitives types like integers, floats and so on, unless you wrap them ...
+For instance, you cannot implement any typeclass for all primitives types like integers, floats and so on, unless you wrap them with an `Identity` type constructor.
+
