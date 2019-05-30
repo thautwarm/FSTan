@@ -2,7 +2,7 @@
 
 Exactly a full-featured and practical implementation typeclasses and higher kinded types in F#.
 
-For manuals check [Guide.md](https://github.com/thautwarm/FSTan/blob/master/Guide.md), where you'll be told how to use these concise typeclasses, higher kined types and constraints.
+For manuals check [Guide.md](https://github.com/thautwarm/FSTan/blob/master/Guide.md), where you'll be told how to use these concise typeclasses, higher kinded types and constraints.
 
 
 
@@ -24,7 +24,7 @@ Yes, exactly, it's a what many and I have dreamed about for so long.
 ## Limitation
 
 1. The performance might hurt in some scenarios, for each the datatype works with
-higher kinded types have to be upcasted to an unique abstract class, for intsance,
+higher kinded types have to be upcasted to an unique abstract class, for instance,
 `maybe<'a>` has to be casted to `hkt<Maybe, 'a>`.
 
 2. For some builtin datatypes cannot be interfaced with `hkt`, an extra wrapper class is
